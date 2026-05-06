@@ -18,6 +18,7 @@ if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) 
 }
 
 export async function POST(request: NextRequest) {
+  let browser = null;
   try {
     // Rate Limiting Check
     if (ratelimit) {
@@ -46,29 +47,34 @@ export async function POST(request: NextRequest) {
     }
 
     // Launch Puppeteer with serverless-compatible Chromium
-    const browser = await puppeteer.launch({
-      args: chromium.args,
+    browser = await puppeteer.launch({
+      args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
+      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
-      headless: true,
-      defaultViewport: null,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
     })
 
     const page = await browser.newPage()
 
     // Set viewport
     const width = parseInt(options.width) || 1280
-    await page.setViewport({ width, height: 900, deviceScaleFactor: options.scale || 1 })
+    await page.setViewport({ 
+      width, 
+      height: 900, 
+      deviceScaleFactor: options.scale || 1 
+    })
 
     // Load content
     if (url) {
       await page.goto(url, {
         waitUntil: 'networkidle2',
-        timeout: 25000,
+        timeout: 30000,
       })
     } else if (html) {
       await page.setContent(html, {
         waitUntil: 'networkidle0',
-        timeout: 10000,
+        timeout: 20000,
       })
     }
 
@@ -94,21 +100,25 @@ export async function POST(request: NextRequest) {
     } else if (type === 'web-to-image' || type === 'html-to-image') {
       // Generate Image
       const imgFormat = options.format === 'jpg' ? 'jpeg' : 'png'
-      const screenshotBuffer = await page.screenshot({
+      const screenshotOptions: any = {
         type: imgFormat,
         fullPage: options.full_page !== false,
-        quality: imgFormat === 'jpeg' ? 90 : undefined,
-        encoding: 'binary',
-      })
+      };
+      
+      if (imgFormat === 'jpeg') {
+        screenshotOptions.quality = 90;
+      }
+
+      const screenshotBuffer = await page.screenshot(screenshotOptions)
       output = Buffer.from(screenshotBuffer as Buffer)
       contentType = imgFormat === 'jpeg' ? 'image/jpeg' : 'image/png'
       filename = imgFormat === 'jpeg' ? 'convertsnap-output.jpg' : 'convertsnap-output.png'
     } else {
-      await browser.close()
-      return NextResponse.json({ error: 'Invalid type' }, { status: 400 })
+      throw new Error('Invalid conversion type')
     }
 
     await browser.close()
+    browser = null;
 
     // Return file as download
     return new NextResponse(output, {
@@ -121,10 +131,14 @@ export async function POST(request: NextRequest) {
       },
     })
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('Conversion error:', error)
-    const message = error instanceof Error ? error.message : 'Conversion failed'
-    return NextResponse.json({ error: message }, { status: 500 })
+    if (browser) await browser.close()
+    
+    return NextResponse.json(
+      { error: `Conversion failed: ${error.message || 'Unknown error'}` }, 
+      { status: 500 }
+    )
   }
 }
 
