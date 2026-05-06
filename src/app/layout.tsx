@@ -41,6 +41,10 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   other: {
     'build-id': '2026-05-06-21-59',
   },
