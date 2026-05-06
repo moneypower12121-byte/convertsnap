@@ -84,15 +84,35 @@ export async function POST(request: NextRequest) {
 
     if (type === 'web-to-pdf' || type === 'html-to-pdf') {
       // Generate PDF
-      const pdfSizes: Record<string, import('puppeteer-core').PaperFormat> = {
-        'A4': 'a4', 'Letter': 'letter', 'A3': 'a3', 'Legal': 'legal'
-      }
-      const pdfBuffer = await page.pdf({
-        format: pdfSizes[options.size] || 'a4',
-        landscape: options.orientation === 'landscape',
+      const pdfOptions: any = {
         printBackground: true,
         margin: getMargin(options.margin),
-      })
+        landscape: options.orientation === 'landscape',
+      }
+
+      if (type === 'web-to-pdf' && options.full_page) {
+        // For seamless single-page capture
+        const height = await page.evaluate(() => {
+          return Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight,
+            document.body.clientHeight,
+            document.documentElement.clientHeight
+          );
+        });
+        
+        pdfOptions.width = width + 'px';
+        pdfOptions.height = Math.ceil(height) + 'px';
+      } else {
+        const pdfSizes: Record<string, import('puppeteer-core').PaperFormat> = {
+          'A4': 'a4', 'Letter': 'letter', 'A3': 'a3', 'Legal': 'legal'
+        }
+        pdfOptions.format = pdfSizes[options.size] || 'a4';
+      }
+
+      const pdfBuffer = await page.pdf(pdfOptions)
       output = Buffer.from(pdfBuffer)
       contentType = 'application/pdf'
       filename = 'convertsnap-output.pdf'
