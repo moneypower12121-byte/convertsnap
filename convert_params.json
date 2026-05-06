@@ -1,0 +1,5 @@
+{
+  Code: 4000,
+  Message: 'Parameter validation error.',
+  InvalidParameters: { Url: [ 'The Url field is required.' ] }
+}
