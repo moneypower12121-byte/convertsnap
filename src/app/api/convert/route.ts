@@ -5,7 +5,7 @@ import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
 // Max execution time for Vercel
-export const maxDuration = 30
+export const maxDuration = 60
 
 // Initialize Rate Limiter if Redis connection is set up
 let ratelimit: Ratelimit | null = null
@@ -80,6 +80,11 @@ export async function POST(request: NextRequest) {
 
     // Emulate screen media to prevent print-specific layout changes
     await page.emulateMediaType('screen')
+
+    // Auto-scroll to trigger lazy loading if it's a URL
+    if (url) {
+      await autoScroll(page)
+    }
 
     let output: Buffer
     let contentType: string
@@ -163,6 +168,26 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+}
+
+// Helper: Auto-scroll to trigger lazy loading
+async function autoScroll(page: import('puppeteer-core').Page) {
+  await page.evaluate(async () => {
+    await new Promise<void>((resolve) => {
+      let totalHeight = 0;
+      const distance = 100;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
+        window.scrollBy(0, distance);
+        totalHeight += distance;
+
+        if (totalHeight >= scrollHeight) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 100);
+    });
+  });
 }
 
 // Helper: margin options
