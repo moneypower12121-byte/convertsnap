@@ -84,6 +84,22 @@ export async function POST(request: NextRequest) {
     // Auto-scroll to trigger lazy loading if it's a URL
     if (url) {
       await autoScroll(page)
+      // Hide common popups/banners
+      await page.evaluate(() => {
+        const selectors = [
+          '[id*="cookie"]', '[class*="cookie"]', '[id*="consent"]', '[class*="consent"]',
+          '[id*="banner"]', '[class*="banner"]', '[id*="modal"]', '[class*="modal"]',
+          '[class*="overlay"]', '.modal-backdrop', '.ad-unit'
+        ];
+        selectors.forEach(selector => {
+          try {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+              if (el instanceof HTMLElement) el.style.display = 'none';
+            });
+          } catch (e) {}
+        });
+      });
     }
 
     let output: Buffer
@@ -170,7 +186,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper: Auto-scroll to trigger lazy loading
+// Helper: Auto-scroll to trigger lazy loading and wait for images
 async function autoScroll(page: import('puppeteer-core').Page) {
   await page.evaluate(async () => {
     await new Promise<void>((resolve) => {
@@ -188,6 +204,21 @@ async function autoScroll(page: import('puppeteer-core').Page) {
       }, 100);
     });
   });
+
+  // Extra wait for any images triggered by scroll
+  await page.evaluate(async () => {
+    const selectors = Array.from(document.querySelectorAll('img'));
+    await Promise.all(selectors.map(img => {
+      if (img.complete) return;
+      return new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = resolve; // Continue anyway if one fails
+      });
+    }));
+  });
+
+  // Small pause for layout settling
+  await new Promise(resolve => setTimeout(resolve, 1000));
 }
 
 // Helper: margin options
