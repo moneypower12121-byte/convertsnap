@@ -78,6 +78,9 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    // Emulate screen media to prevent print-specific layout changes
+    await page.emulateMediaType('screen')
+
     let output: Buffer
     let contentType: string
     let filename: string
@@ -86,7 +89,7 @@ export async function POST(request: NextRequest) {
       // Generate PDF
       const pdfOptions: any = {
         printBackground: true,
-        margin: getMargin(options.margin),
+        margin: options.full_page ? { top: '0', right: '0', bottom: '0', left: '0' } : getMargin(options.margin),
         landscape: options.orientation === 'landscape',
       }
 
