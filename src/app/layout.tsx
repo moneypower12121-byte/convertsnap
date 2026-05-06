@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  other: {
+    'build-id': '2026-05-06-21-59',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
