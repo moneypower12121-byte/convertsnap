@@ -37,29 +37,29 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-6 font-heading tracking-wide uppercase text-sm">Tools</h4>
             <ul className="flex flex-col gap-4">
-              <li><Link href="/web-to-pdf" className="text-slate-400 hover:text-white transition-colors">Web to PDF</Link></li>
-              <li><Link href="/web-to-image" className="text-slate-400 hover:text-white transition-colors">Web to Image</Link></li>
-              <li><Link href="/html-to-pdf" className="text-slate-400 hover:text-white transition-colors">HTML to PDF</Link></li>
-              <li><Link href="/html-to-image" className="text-slate-400 hover:text-white transition-colors">HTML to Image</Link></li>
+              <li><Link href="/web-to-pdf" className="text-slate-400 hover:text-primary-light transition-colors">Web to PDF</Link></li>
+              <li><Link href="/web-to-image" className="text-slate-400 hover:text-primary-light transition-colors">Web to Image</Link></li>
+              <li><Link href="/html-to-pdf" className="text-slate-400 hover:text-primary-light transition-colors">HTML to PDF</Link></li>
+              <li><Link href="/html-to-image" className="text-slate-400 hover:text-primary-light transition-colors">HTML to Image</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6 font-heading tracking-wide uppercase text-sm">Resources</h4>
             <ul className="flex flex-col gap-4">
-              <li><Link href="/documentation" className="text-slate-400 hover:text-white transition-colors">Documentation</Link></li>
-              <li><Link href="/faq" className="text-slate-400 hover:text-white transition-colors">FAQ & Support</Link></li>
-              <li><Link href="/blog" className="text-slate-400 hover:text-white transition-colors">Blog</Link></li>
+              <li><Link href="/documentation" className="text-slate-400 hover:text-primary-light transition-colors">Documentation</Link></li>
+              <li><Link href="/faq" className="text-slate-400 hover:text-primary-light transition-colors">FAQ & Support</Link></li>
+              <li><Link href="/blog" className="text-slate-400 hover:text-primary-light transition-colors">Blog</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6 font-heading tracking-wide uppercase text-sm">Legal</h4>
             <ul className="flex flex-col gap-4">
-              <li><Link href="/privacy" className="text-slate-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-slate-400 hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link href="/cookies" className="text-slate-400 hover:text-white transition-colors">Cookie Policy</Link></li>
-              <li><Link href="/contact" className="text-slate-400 hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="/privacy" className="text-slate-400 hover:text-primary-light transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-slate-400 hover:text-primary-light transition-colors">Terms of Service</Link></li>
+              <li><Link href="/cookies" className="text-slate-400 hover:text-primary-light transition-colors">Cookie Policy</Link></li>
+              <li><Link href="/contact" className="text-slate-400 hover:text-primary-light transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 

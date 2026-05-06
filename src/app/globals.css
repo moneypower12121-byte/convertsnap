@@ -15,6 +15,7 @@
   --success: #10B981;
   --tool-blue: #EFF6FF;
   --accent: #06B6D4;
+  --bg-dark: #0F172A;
 }
 
 @theme inline {
@@ -26,6 +27,7 @@
   --color-primary-dark: var(--primary-dark);
   
   --color-bg-main: var(--bg-main);
+  --color-bg-dark: var(--bg-dark);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
