@@ -34,7 +34,7 @@ export default function Navigation() {
     }`;
 
   const NavLink = ({ href, className, children, end }: any) => {
-    const isActive = end ? pathname === href : pathname.startsWith(href);
+    const isActive = pathname ? (end ? pathname === href : pathname.startsWith(href)) : false;
     return (
       <Link href={href} className={className({ isActive })}>
         {children}
