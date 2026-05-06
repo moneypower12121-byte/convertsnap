@@ -84,6 +84,8 @@ export async function POST(request: NextRequest) {
     // Auto-scroll to trigger lazy loading if it's a URL
     if (url) {
       await autoScroll(page)
+      // Scroll back to top for clean header capture
+      await page.evaluate(() => window.scrollTo(0, 0));
       // Hide common popups/banners
       await page.evaluate(() => {
         const selectors = [
@@ -143,20 +145,37 @@ export async function POST(request: NextRequest) {
 
     } else if (type === 'web-to-image' || type === 'html-to-image') {
       // Generate Image
-      const imgFormat = options.format === 'jpg' ? 'jpeg' : 'png'
-      const screenshotOptions: any = {
-        type: imgFormat,
-        fullPage: options.full_page !== false,
-      };
+      const imgFormat = (options.format || 'png').toLowerCase() as 'png' | 'jpeg' | 'webp';
       
-      if (imgFormat === 'jpeg') {
-        screenshotOptions.quality = 90;
+      if (type === 'web-to-image' && options.full_page !== false) {
+        // More reliable full page capture for images
+        const height = await page.evaluate(() => {
+          return Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight,
+            document.body.clientHeight,
+            document.documentElement.clientHeight
+          );
+        });
+        
+        await page.setViewport({
+          width,
+          height: Math.ceil(height),
+          deviceScaleFactor: options.scale || 1
+        });
       }
+
+      const screenshotOptions: any = {
+        type: imgFormat === 'jpg' ? 'jpeg' : imgFormat,
+        fullPage: type === 'web-to-image' && options.full_page !== false ? false : (options.full_page !== false),
+      };
 
       const screenshotBuffer = await page.screenshot(screenshotOptions)
       output = Buffer.from(screenshotBuffer as Buffer)
-      contentType = imgFormat === 'jpeg' ? 'image/jpeg' : 'image/png'
-      filename = imgFormat === 'jpeg' ? 'convertsnap-output.jpg' : 'convertsnap-output.png'
+      contentType = imgFormat === 'jpg' ? 'image/jpeg' : `image/${imgFormat}`
+      filename = `convertsnap-output.${imgFormat === 'jpg' ? 'jpg' : imgFormat}`
     } else {
       throw new Error('Invalid conversion type')
     }
