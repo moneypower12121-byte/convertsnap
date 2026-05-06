@@ -246,9 +246,10 @@ export default function HtmlToPdf() {
           type: 'html-to-pdf',
           html: finalHtml,
           options: {
-            size,
+            size: size === 'Seamless' ? 'A4' : size,
             orientation,
-            margin: margin.toLowerCase()
+            margin: margin.toLowerCase(),
+            full_page: size === 'Seamless'
           }
         })
       });
@@ -423,10 +424,11 @@ export default function HtmlToPdf() {
                         disabled={status === 'loading'}
                         className="w-full appearance-none px-4 py-2.5 rounded-lg border border-border bg-slate-50 text-text-primary text-sm focus:outline-none focus:border-purple-600 transition-colors cursor-pointer"
                       >
-                        <option value="A4">A4</option>
-                        <option value="Letter">Letter</option>
-                        <option value="A3">A3</option>
+                        <option value="A4">A4 (Standard)</option>
+                        <option value="Letter">Letter (US)</option>
+                        <option value="A3">A3 (Large)</option>
                         <option value="Legal">Legal</option>
+                        <option value="Seamless">Single Page (Seamless)</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
                     </div>

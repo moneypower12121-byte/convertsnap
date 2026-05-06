@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
         landscape: options.orientation === 'landscape',
       }
 
-      if (type === 'web-to-pdf' && options.full_page) {
+      if ((type === 'web-to-pdf' || type === 'html-to-pdf') && options.full_page) {
         // For seamless single-page capture
         const height = await page.evaluate(() => {
           return Math.max(
