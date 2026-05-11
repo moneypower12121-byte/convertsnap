@@ -3,10 +3,10 @@ import React from 'react';
 import { motion } from 'motion/react';
 
 const stats = [
-  { label: 'Files Converted', value: '2M+' },
-  { label: 'Countries Supported', value: '150+' },
-  { label: 'API Uptime', value: '99.9%' },
-  { label: 'Cost', value: 'Always Free' }
+  { label: 'Conversion Speed', value: '< 3s' },
+  { label: 'Uptime Guarantee', value: '99.9%' },
+  { label: 'Success Rate', value: '99.8%' },
+  { label: 'Conversion Cost', value: '$0' }
 ];
 
 export default function Stats() {

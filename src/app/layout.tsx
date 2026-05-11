@@ -77,11 +77,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "ConvertSnap",
-              "url": "https://www.convertsnap.net",
+              "url": "https://convertsnap.vercel.app",
               "description": "Convert any website URL or HTML to PDF or image free. No signup. Fast and accurate.",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://www.convertsnap.net/search?q={search_term_string}",
+                "target": "https://convertsnap.vercel.app/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })

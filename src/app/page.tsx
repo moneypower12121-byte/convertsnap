@@ -12,11 +12,11 @@ import CTA from '@/components/CTA';
 export const metadata: Metadata = {
   title: 'ConvertSnap — Free Web to PDF & Image Converter Online',
   description: 'Convert any website URL or HTML code to PDF or image for free. No signup required. Fast, secure, works on all browsers.',
-  alternates: { canonical: 'https://www.convertsnap.net' },
+  alternates: { canonical: 'https://convertsnap.vercel.app' },
   openGraph: {
     title: 'ConvertSnap — Free Web to PDF & Image Converter',
     description: 'Convert any URL or HTML to PDF or image instantly. Free, fast, no login needed.',
-    url: 'https://www.convertsnap.net',
+    url: 'https://convertsnap.vercel.app',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 }
@@ -25,7 +25,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "ConvertSnap",
-  "url": "https://www.convertsnap.net",
+  "url": "https://convertsnap.vercel.app",
   "description": "Free online tool to convert website URLs and HTML code to PDF or image files.",
   "applicationCategory": "UtilityApplication",
   "operatingSystem": "All",
@@ -37,8 +37,8 @@ const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "ConvertSnap",
-  "url": "https://www.convertsnap.net",
-  "email": "hello@convertsnap.net",
+  "url": "https://convertsnap.vercel.app",
+  "email": "hello@convertsnap.vercel.app",
   "sameAs": ["https://twitter.com/convertsnap","https://github.com/convertsnap"]
 }
 
